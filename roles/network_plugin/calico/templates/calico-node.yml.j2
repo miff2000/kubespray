@@ -75,6 +75,10 @@ spec:
             # The CNI network config to install on each node.
             - name: CNI_NETWORK_CONFIG_FILE
               value: "/host/etc/cni/net.d/calico.conflist.template"
+{% if ip is defined and ip | ipv6 %}
+            - name: CALICO_IPV6POOL_CIDR
+              value: "{{ kube_pods_subnet }}"
+{% endif %}
             # Prevents the container from sleeping forever.
             - name: SLEEP
               value: "false"
@@ -220,9 +224,14 @@ spec:
 {% endif %}
             - name: CALICO_IPV4POOL_IPIP
               value: "{{ calico_ipv4pool_ipip }}"
+{% if ip is defined and ip | ipv6 %}
+            - name: FELIX_IPV6SUPPORT
+              value: "true"
+{% else %}
             # Disable IPv6 on Kubernetes.
             - name: FELIX_IPV6SUPPORT
               value: "false"
+{% endif %}
             # Set Felix logging to "info"
             - name: FELIX_LOGSEVERITYSCREEN
               value: "{{ calico_loglevel }}"
@@ -248,9 +257,17 @@ spec:
             - name: CALICO_ADVERTISE_CLUSTER_IPS
               value: "{{ kube_service_addresses }}"
 {% endif %}
+{% if calico_ip6_auto_method is defined %}
+#             - name: IP6_AUTODETECTION_METHOD
+#               value: "{{ calico_ip6_auto_method }}"
+            - name: IP6
+              value: "autodetect"
+            - name: CALICO_IPV6POOL_NAT_OUTGOING
+              value: "true"
+{% endif %}
 {% if calico_ip_auto_method is defined %}
-            - name: IP_AUTODETECTION_METHOD
-              value: "{{ calico_ip_auto_method }}"
+#             - name: IP_AUTODETECTION_METHOD
+#               value: "{{ calico_ip_auto_method }}"
             - name: IP
               value: "autodetect"
 {% else %}
@@ -285,7 +302,7 @@ spec:
           livenessProbe:
 {% if calico_version is version('v3.8.0', '<') %}
             httpGet:
-              host: 127.0.0.1
+              host: "{{ '::1' if ip is defined and ip | ipv6 else '127.0.0.1' }}"
               path: /liveness
               port: 9099
 {% else %}
@@ -303,7 +320,7 @@ spec:
             failureThreshold: 6
 {% if calico_version is version('v3.3.0', '<') %}
             httpGet:
-              host: 127.0.0.1
+              host: "{{ '::1' if ip is defined and ip | ipv6 else '127.0.0.1' }}"
               path: /readiness
               port: 9099
 {% else %}

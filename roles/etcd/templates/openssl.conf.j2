@@ -43,3 +43,4 @@ IP.{{ counter["ip"] }} = {{ hostvars[host]['ip'] | default(fallback_ips[host]) }
 IP.{{ counter["ip"] }} = {{ cert_alt_ip }}{{ increment(counter, 'ip') }}
 {% endfor %}
 IP.{{ counter["ip"] }} = 127.0.0.1
+IP.{{ counter["ip"] }} = ::1

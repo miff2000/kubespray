@@ -29,8 +29,14 @@
 {% else %}
       "ipam": {
         "type": "calico-ipam",
+{%   if ip is defined and ip | ipv6 %}
+        "assign_ipv6": "true",
+        "assign_ipv4": "false",
+        "ipv6_pools": ["{{ calico_pool_cidr | default(kube_pods_subnet) }}"]
+{%   else %}
         "assign_ipv4": "true",
         "ipv4_pools": ["{{ calico_pool_cidr | default(kube_pods_subnet) }}"]
+{%   endif %}
       },
 {% endif %}
 {% if (calico_feature_control is defined) and (calico_feature_control|length > 0) %}

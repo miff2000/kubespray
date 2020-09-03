@@ -45,6 +45,10 @@
   run_once: yes
   changed_when: false
 
+- name: "Show current calico version"
+  debug:
+    var: calico_version_on_server.stdout
+
 - name: "Determine if calico upgrade is needed"
   block:
     - name: "Check that calico version is enough for upgrade"

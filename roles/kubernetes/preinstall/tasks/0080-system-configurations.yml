@@ -54,10 +54,19 @@
     name: "{{ sysctl_file_path | dirname }}"
     state: directory
 
-- name: Enable ip forwarding
+- name: Enable IP forwarding
   sysctl:
     sysctl_file: "{{ sysctl_file_path }}"
     name: net.ipv4.ip_forward
     value: 1
     state: present
     reload: yes
+
+- name: Enable IP forwarding for IPv6
+  sysctl:
+    sysctl_file: "{{ sysctl_file_path }}"
+    name: net.ipv6.conf.default.forwarding
+    value: 1
+    state: present
+    reload: yes
+  when: ip is defined and ip | ipv6

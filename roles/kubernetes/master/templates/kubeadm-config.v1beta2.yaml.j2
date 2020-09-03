@@ -92,22 +92,23 @@ networking:
   podSubnet: {{ kube_pods_subnet }}
 kubernetesVersion: {{ kube_version }}
 {% if kubeadm_config_api_fqdn is defined %}
-controlPlaneEndpoint: {{ kubeadm_config_api_fqdn }}:{{ loadbalancer_apiserver.port | default(kube_apiserver_port) }}
+controlPlaneEndpoint: "{{ kubeadm_config_api_fqdn }}:{{ loadbalancer_apiserver.port | default(kube_apiserver_port) }}"
 {% else %}
-controlPlaneEndpoint: {{ ip | default(fallback_ips[inventory_hostname]) }}:{{ kube_apiserver_port }}
+controlPlaneEndpoint: "{{ ip | default(fallback_ips[inventory_hostname]) | ipwrap }}:{{ kube_apiserver_port }}"
 {% endif %}
 certificatesDir: {{ kube_cert_dir }}
 imageRepository: {{ kube_image_repo }}
 useHyperKubeImage: {{ kubeadm_use_hyperkube_image }}
 apiServer:
   extraArgs:
+    service-cluster-ip-range: {{ kube_service_addresses }}
 {% if kube_api_anonymous_auth is defined %}
     anonymous-auth: "{{ kube_api_anonymous_auth }}"
 {% endif %}
     authorization-mode: {{ authorization_modes | join(',') }}
-    bind-address: {{ kube_apiserver_bind_address }}
+    bind-address: "{{ kube_apiserver_bind_address }}"
 {% if kube_apiserver_insecure_port|string != "0" %}
-    insecure-bind-address: {{ kube_apiserver_insecure_bind_address }}
+    insecure-bind-address: "{{ kube_apiserver_insecure_bind_address }}"
 {% endif %}
     insecure-port: "{{ kube_apiserver_insecure_port }}"
 {% if kube_apiserver_enable_admission_plugins|length > 0 %}
@@ -257,7 +258,7 @@ controllerManager:
     node-cidr-mask-size: "{{ kube_network_node_prefix }}"
     profiling: "{{ kube_profiling }}"
     terminated-pod-gc-threshold: "{{ kube_controller_terminated_pod_gc_threshold }}"
-    bind-address: {{ kube_controller_manager_bind_address }}
+    bind-address: "{{ kube_controller_manager_bind_address }}"
 {% if kube_feature_gates %}
     feature-gates: {{ kube_feature_gates|join(',') }}
 {% endif %}
@@ -302,7 +303,7 @@ controllerManager:
 {% endif %}
 scheduler:
   extraArgs:
-    bind-address: {{ kube_scheduler_bind_address }}
+    bind-address: "{{ kube_scheduler_bind_address }}"
 {% if kube_feature_gates %}
     feature-gates: {{ kube_feature_gates|join(',') }}
 {% endif %}
@@ -330,14 +331,14 @@ scheduler:
 ---
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
 kind: KubeProxyConfiguration
-bindAddress: {{ kube_proxy_bind_address }}
+bindAddress: "{{ kube_proxy_bind_address }}"
 clientConnection:
   acceptContentTypes: {{ kube_proxy_client_accept_content_types }}
   burst: {{ kube_proxy_client_burst }}
   contentType: {{ kube_proxy_client_content_type }}
   kubeconfig: {{ kube_proxy_client_kubeconfig }}
   qps: {{ kube_proxy_client_qps }}
-clusterCIDR: {{ kube_pods_subnet }}
+clusterCIDR: "{{ kube_pods_subnet }}"
 configSyncPeriod: {{ kube_proxy_config_sync_period }}
 conntrack:
   maxPerCore: {{ kube_proxy_conntrack_max_per_core }}
@@ -345,7 +346,7 @@ conntrack:
   tcpCloseWaitTimeout: {{ kube_proxy_conntrack_tcp_close_wait_timeout }}
   tcpEstablishedTimeout: {{ kube_proxy_conntrack_tcp_established_timeout }}
 enableProfiling: {{ kube_proxy_enable_profiling }}
-healthzBindAddress: {{ kube_proxy_healthz_bind_address }}
+healthzBindAddress: "{{ kube_proxy_healthz_bind_address }}"
 hostnameOverride: {{ kube_override_hostname }}
 iptables:
   masqueradeAll: {{ kube_proxy_masquerade_all }}
@@ -361,7 +362,7 @@ ipvs:
   tcpTimeout: {{ kube_proxy_tcp_timeout }}
   tcpFinTimeout: {{ kube_proxy_tcp_fin_timeout }}
   udpTimeout: {{ kube_proxy_udp_timeout }}
-metricsBindAddress: {{ kube_proxy_metrics_bind_address }}
+metricsBindAddress: "{{ kube_proxy_metrics_bind_address }}"
 mode: {{ kube_proxy_mode }}
 nodePortAddresses: {{ kube_proxy_nodeport_addresses }}
 oomScoreAdj: {{ kube_proxy_oom_score_adj }}

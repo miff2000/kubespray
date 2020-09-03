@@ -1,4 +1,5 @@
 ---
+
 - name: Set external kube-apiserver endpoint
   set_fact:
     external_apiserver_address: >-

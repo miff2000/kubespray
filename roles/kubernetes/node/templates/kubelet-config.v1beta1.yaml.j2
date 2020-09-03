@@ -25,7 +25,7 @@ enforceNodeAllocatable:
 staticPodPath: {{ kube_manifest_dir }}
 cgroupDriver: {{ kubelet_cgroup_driver|default(kubelet_cgroup_driver_detected) }}
 maxPods: {{ kubelet_max_pods }}
-address: {{ kubelet_bind_address }}
+address: "{{ kubelet_bind_address }}"
 readOnlyPort: {{ kube_read_only_port }}
 healthzPort: {{ kubelet_healthz_port }}
 healthzBindAddress: {{ kubelet_healthz_bind_address }}
