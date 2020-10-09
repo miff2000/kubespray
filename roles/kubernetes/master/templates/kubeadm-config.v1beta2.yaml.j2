@@ -270,7 +270,7 @@ controllerManager:
     service-cluster-ip-range: "{{ kube_service_addresses }}{% ','+kube_service_addresses_ipv6 if kube_service_addresses_ipv6 %}"
 {% if kube_network_node_prefix_ipv6 %}
     node-cidr-mask-size-ipv4: "{{ kube_network_node_prefix }}"
-    node-cidr-mask-size-ipv6: "{{ kube_network_node_prefix }}"
+    node-cidr-mask-size-ipv6: "{{ kube_network_node_prefix_ipv6 }}"
 {% else %}
     node-cidr-mask-size: "{{ kube_network_node_prefix }}"
 {% endif %}
@@ -356,7 +356,7 @@ clientConnection:
   contentType: {{ kube_proxy_client_content_type }}
   kubeconfig: {{ kube_proxy_client_kubeconfig }}
   qps: {{ kube_proxy_client_qps }}
-clusterCIDR: "{{ kube_pods_subnet }}{% ','+kube_pods_subnet_ipv6 if kube_pods_subnet_ipv6 %}"
+clusterCIDR: {{ kube_pods_subnet }}{% ',' + kube_pods_subnet_ipv6 if kube_pods_subnet_ipv6 %}
 configSyncPeriod: {{ kube_proxy_config_sync_period }}
 conntrack:
   maxPerCore: {{ kube_proxy_conntrack_max_per_core }}
