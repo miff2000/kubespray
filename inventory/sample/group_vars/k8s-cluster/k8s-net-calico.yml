@@ -17,6 +17,9 @@
 # add default ippool CIDR (must be inside kube_pods_subnet, defaults to kube_pods_subnet otherwise)
 # calico_pool_cidr: 1.2.3.4/5
 
+# add default ipv6 ippool CIDR (must be inside kube_pods_subnet_ipv6, defaults to kube_pods_subnet_ipv6 otherwise)
+# calico_pool_cidr_ipv6: fd52:5b5b:b0ab::/112
+
 # Global as_num (/calico/bgp/v1/global/as_num)
 # global_as_num: "64512"
 

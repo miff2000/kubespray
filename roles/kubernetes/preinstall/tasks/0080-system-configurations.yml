@@ -62,6 +62,17 @@
     state: present
     reload: yes
 
+- name: Enable ipv6 forwarding
+  sysctl:
+    sysctl_file: "{{ sysctl_file_path }}"
+    name: net.ipv6.conf.all.forwarding
+    value: 1
+    state: present
+    reload: yes
+  when:
+  - kube_service_addresses_ipv6 is defined
+  - kube_pods_subnet_ipv6 is defined
+
 - name: Ensure kube-bench parameters are set
   sysctl:
     sysctl_file: /etc/sysctl.d/bridge-nf-call.conf

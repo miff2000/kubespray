@@ -220,9 +220,12 @@ spec:
 {% endif %}
             - name: CALICO_IPV4POOL_IPIP
               value: "{{ calico_ipv4pool_ipip }}"
-            # Disable IPv6 on Kubernetes.
             - name: FELIX_IPV6SUPPORT
+{% if kube_service_addresses_ipv6 and kube_pods_subnet_ipv6 %}
+              value: "true"
+{% else %}
               value: "false"
+{% endif %}
             # Set Felix logging to "info"
             - name: FELIX_LOGSEVERITYSCREEN
               value: "{{ calico_loglevel }}"
@@ -258,6 +261,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.hostIP
+{% endif %}
+{% if kube_service_addresses_ipv6 and kube_pods_subnet_ipv6 %}
+            - name: IP6
+              value: autodetect
 {% endif %}
 {% if calico_version is version('v3.9.0', '>=') and calico_use_default_route_src_ipaddr|default(false) %}
             - name: FELIX_DEVICEROUTESOURCEADDRESS

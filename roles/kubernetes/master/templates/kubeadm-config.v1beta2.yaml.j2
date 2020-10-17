@@ -370,6 +370,12 @@ conntrack:
   tcpCloseWaitTimeout: {{ kube_proxy_conntrack_tcp_close_wait_timeout }}
   tcpEstablishedTimeout: {{ kube_proxy_conntrack_tcp_established_timeout }}
 enableProfiling: {{ kube_proxy_enable_profiling }}
+{% if kube_feature_gates %}
+featureGates:
+{%   for kube_feature_gate in kube_feature_gates %}
+  {{ kube_feature_gate.split("=")[0] }}: {{ kube_feature_gate.split("=")[1] }}
+{%   endfor %}
+{% endif %}
 healthzBindAddress: {{ kube_proxy_healthz_bind_address }}
 hostnameOverride: {{ kube_override_hostname }}
 iptables:
@@ -411,3 +417,9 @@ clusterDNS:
 {% for dns_address in kubelet_cluster_dns %}
 - {{ dns_address }}
 {% endfor %}
+{% if kube_feature_gates %}
+featureGates:
+{%   for kube_feature_gate in kube_feature_gates %}
+  {{ kube_feature_gate.split("=")[0] }}: {{ kube_feature_gate.split("=")[1] }}
+{%   endfor %}
+{% endif %}

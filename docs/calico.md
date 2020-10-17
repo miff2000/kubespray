@@ -75,6 +75,7 @@ In some cases you may want to add several pools and not have them considered by 
 
 ```ShellSession
 calico_pool_cidr: 10.233.64.0/20
+calico_pool_cidr_ipv6: fd52:5b5b:b0ab::/112
 ```
 
 ### Optional : BGP Peering with border routers
