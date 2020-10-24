@@ -221,7 +221,7 @@ spec:
             - name: CALICO_IPV4POOL_IPIP
               value: "{{ calico_ipv4pool_ipip }}"
             - name: FELIX_IPV6SUPPORT
-{% if enable_ipv6_dual_stack %}
+{% if enable_dual_stack_networks %}
               value: "true"
 {% else %}
               value: "false"
@@ -262,7 +262,7 @@ spec:
                 fieldRef:
                   fieldPath: status.hostIP
 {% endif %}
-{% if enable_ipv6_dual_stack %}
+{% if enable_dual_stack_networks %}
             - name: IP6
               value: autodetect
 {% endif %}

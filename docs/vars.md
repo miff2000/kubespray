@@ -62,7 +62,7 @@ following default cluster parameters:
   raise an assertion in playbooks if the `kubelet_max_pods` var also isn't adjusted accordingly
   (assertion not applicable to calico which doesn't use this as a hard limit, see
   [Calico IP block sizes](https://docs.projectcalico.org/reference/resources/ippool#block-sizes).
-* *enable_ipv6_dual_stack* - Setting this to true will provision both IPv4 and IPv6 networking for pods and services.
+* *enable_dual_stack_networks* - Setting this to true will provision both IPv4 and IPv6 networking for pods and services.
 * *kube_service_addresses_ipv6* - Subnet for cluster IPv6 IPs (default is
   fd85:ee78:d8a6:8607::1000/116). Must not overlap with ``kube_pods_subnet_ipv6``
 * *kube_pods_subnet_ipv6* - Subnet for Pod IPv6 IPs (default is fd85:ee78:d8a6:8607::2000/116). 
@@ -95,9 +95,9 @@ private addresses, make sure to pick another values for ``kube_service_addresses
 and ``kube_pods_subnet``, for example from the ``172.18.0.0/16``.
 
 
-## Enabling IPv6 Dual Stack networking
+## Enabling Dual Stack (IPV4 + IPV6) networking
 
-If *enable_ipv6_dual_stack* is set to ``true``, IPv6 Dual Stack networking will be enabled in the cluster. This will use the default IPv6 subnets specified in the defaults file in the ``kubespray-defaults`` role, unless overridden of course.
+If *enable_dual_stack_networks* is set to ``true``, Dual Stack networking will be enabled in the cluster. This will use the default IPv4 and IPv6 subnets specified in the defaults file in the ``kubespray-defaults`` role, unless overridden of course.
 
 ## DNS variables
 

@@ -69,7 +69,7 @@
     value: 1
     state: present
     reload: yes
-  when: enable_ipv6_dual_stack | bool
+  when: enable_dual_stack_networks | bool
 
 - name: Ensure kube-bench parameters are set
   sysctl:
