@@ -274,7 +274,7 @@ controllerManager:
     pod-eviction-timeout: {{ kube_controller_pod_eviction_timeout }}
     cluster-cidr: "{{ kube_pods_subnet }}{{ ',' + kube_pods_subnet_ipv6 if enable_ipv6_dual_stack }}"
     service-cluster-ip-range: "{{ kube_service_addresses }}{{ ',' + kube_service_addresses_ipv6 if enable_ipv6_dual_stack }}"
-{% if kube_network_node_prefix_ipv6 %}
+{% if enable_ipv6_dual_stack %}
     node-cidr-mask-size-ipv4: "{{ kube_network_node_prefix }}"
     node-cidr-mask-size-ipv6: "{{ kube_network_node_prefix_ipv6 }}"
 {% else %}
