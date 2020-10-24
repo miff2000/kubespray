@@ -112,7 +112,7 @@
   changed_when: false
   when:
     - inventory_hostname == groups['kube-master'][0]
-    - kube_service_addresses_ipv6 and kube_pods_subnet_ipv6
+    - enable_ipv6_dual_stack | bool
 
 - name: Calico | Ensure that calico_pool_cidr is within kube_pods_subnet when defined
   assert:
@@ -131,7 +131,7 @@
     - inventory_hostname == groups['kube-master'][0]
     - 'calico_conf.stdout == "0"'
     - calico_pool_cidr_ipv6 is defined
-    - kube_service_addresses_ipv6 and kube_pods_subnet_ipv6
+    - enable_ipv6_dual_stack | bool
 
 - name: Calico | Create calico manifests for kdd
   template:
@@ -218,7 +218,7 @@
     - inventory_hostname == groups['kube-master'][0]
     - 'calico_conf.stdout == "0"'
     - calico_version is version("v3.3.0", ">=")
-    - kube_service_addresses_ipv6 and kube_pods_subnet_ipv6
+    - enable_ipv6_dual_stack | bool
 
 - name: "Determine nodeToNodeMesh needed state"
   set_fact:

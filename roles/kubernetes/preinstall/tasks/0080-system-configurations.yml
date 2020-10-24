@@ -69,9 +69,7 @@
     value: 1
     state: present
     reload: yes
-  when:
-  - kube_service_addresses_ipv6 is defined
-  - kube_pods_subnet_ipv6 is defined
+  when: enable_ipv6_dual_stack | bool
 
 - name: Ensure kube-bench parameters are set
   sysctl:

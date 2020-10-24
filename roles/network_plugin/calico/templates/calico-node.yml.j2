@@ -221,7 +221,7 @@ spec:
             - name: CALICO_IPV4POOL_IPIP
               value: "{{ calico_ipv4pool_ipip }}"
             - name: FELIX_IPV6SUPPORT
-{% if kube_service_addresses_ipv6 and kube_pods_subnet_ipv6 %}
+{% if enable_ipv6_dual_stack %}
               value: "true"
 {% else %}
               value: "false"
@@ -262,7 +262,7 @@ spec:
                 fieldRef:
                   fieldPath: status.hostIP
 {% endif %}
-{% if kube_service_addresses_ipv6 and kube_pods_subnet_ipv6 %}
+{% if enable_ipv6_dual_stack %}
             - name: IP6
               value: autodetect
 {% endif %}
